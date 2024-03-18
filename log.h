@@ -23,9 +23,11 @@ const char *logLevelStrings[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FAT
 
 #ifndef LOG_NO_COLOR
 const char *logLevelColors[] = {"\x1b[90m", "\x1b[32m", "\x1b[36m", "\x1b[33m", "\x1b[31m", "\x1b[97;41m"};
+const char *fileColor = "\x1b[90m";
 const char *resetColor = "\x1b[0m";
 #else
 const char *logLevelColors[] = {"" /* gray */, "" /* green */, "" /* cyan */, "" /* yellow */, "" /* red */, "" /* white on red */};
+const char *fileColor = "";
 const char *resetColor = "";
 #endif
 
@@ -49,8 +51,8 @@ void log(LogLevel level, const char *file, int line, const char *fmt, ...) {
         va_list args;
         va_start(args, fmt);
 
-        fprintf(stdout, "%s.%03ld %s%-5s%s %s:%d: ", formatted_time.c_str(), value.count() % 1000,
-                logLevelColors[level], logLevelStrings[level], resetColor, file, line);
+        fprintf(stdout, "%s.%03ld %s%-5s%s %s%s:%d%s: ", formatted_time.c_str(), value.count() % 1000,
+                logLevelColors[level], logLevelStrings[level], resetColor, fileColor, file, line, resetColor);
 
         vfprintf(stdout, fmt, args);
 
